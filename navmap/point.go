@@ -39,7 +39,7 @@ func (p *Point) GetNeighbors(maxp *Point) []Point {
 	return neighbors
 }
 
-func (p *Point) GetNeighbor(dir Direction, maxp *Point) (*Point, error) {
+func (p *Point) GetNeighbor(dir Direction, wd int, h int) (*Point, error) {
 	var d Point
 	switch dir {
 	case North:
@@ -52,7 +52,7 @@ func (p *Point) GetNeighbor(dir Direction, maxp *Point) (*Point, error) {
 		d = w
 	}
 	neigh := p.Add(&d)
-	if neigh.x >= 0 && neigh.x <= maxp.x && neigh.y >= 0 && neigh.y <= maxp.y {
+	if neigh.x >= 0 && neigh.x < wd && neigh.y >= 0 && neigh.y < h {
 		return &neigh, nil
 	} else {
 		return nil, errors.New("out of bounds")

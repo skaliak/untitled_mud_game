@@ -1,30 +1,34 @@
 package navmap
 
+import "fmt"
+
 type WorldMap struct {
-	endCorner Point
-	rooms     []Room
-	roomIdx   int
+	w       int
+	h       int
+	rooms   []Room
+	roomIdx int
 }
 
 func MakeMap(w int, h int) WorldMap {
-	m := WorldMap{Point{w, h}, make([]Room, w*h), 0}
+	m := WorldMap{w, h, make([]Room, w*h), 0}
 	for i := 0; i < w*h; i++ {
 		m.rooms[i] = Room{
 			loc:  m.loc(i),
 			desc: "room",
 		}
+		fmt.Printf("%d:%s\n", i, m.rooms[i].GetDesc())
 	}
 
 	return m
 }
 
-func (wm *WorldMap) idx(x int, y int) int {
-	return (y*wm.endCorner.x + 1) + x
+func (wm *WorldMap) Idx(x int, y int) int {
+	return (y * (wm.w)) + x
 }
 
 func (wm *WorldMap) loc(i int) *Point {
-	y := i / wm.endCorner.x
-	x := i % wm.endCorner.x
+	y := i / wm.w
+	x := i % wm.w
 	return &Point{x, y}
 }
 
@@ -34,10 +38,13 @@ func (wm *WorldMap) GetCurrentRoom() *Room {
 
 func (wm *WorldMap) Navigate(d Direction) error {
 	rm := wm.GetCurrentRoom()
-	pt, err := rm.loc.GetNeighbor(d, &wm.endCorner)
+	pt, err := rm.loc.GetNeighbor(d, wm.w, wm.h)
 	if err != nil {
+		fmt.Printf("%e\n", err)
 		return err
 	}
-	wm.roomIdx = wm.idx(pt.x, pt.y)
+	fmt.Printf("new point: %d,%d\n", pt.x, pt.y)
+	wm.roomIdx = wm.Idx(pt.x, pt.y)
+	fmt.Printf("new idx: %d\n", wm.roomIdx)
 	return nil
 }
