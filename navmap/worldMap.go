@@ -9,6 +9,11 @@ type WorldMap struct {
 	roomIdx int
 }
 
+type Navigater interface {
+	Navigate(d Direction) (*Room, error)
+	GetCurrentRoom() *Room
+}
+
 func MakeMap(w int, h int) WorldMap {
 	m := WorldMap{w, h, make([]Room, w*h), 0}
 	for i := 0; i < w*h; i++ {
