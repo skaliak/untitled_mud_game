@@ -10,7 +10,7 @@ type WorldMap struct {
 }
 
 type Navigater interface {
-	Navigate(d Direction) (*Room, error)
+	Navigate(d Direction, room *Room) (*Room, error)
 	GetCurrentRoom() *Room
 }
 
@@ -41,15 +41,15 @@ func (wm *WorldMap) GetCurrentRoom() *Room {
 	return &wm.rooms[wm.roomIdx]
 }
 
-func (wm *WorldMap) Navigate(d Direction) error {
+func (wm *WorldMap) Navigate(d Direction, room *Room) (*Room, error) {
 	rm := wm.GetCurrentRoom()
 	pt, err := rm.loc.GetNeighbor(d, wm.w, wm.h)
 	if err != nil {
 		fmt.Printf("%e\n", err)
-		return err
+		return nil, err
 	}
 	fmt.Printf("new point: %d,%d\n", pt.x, pt.y)
 	wm.roomIdx = wm.Idx(pt.x, pt.y)
 	fmt.Printf("new idx: %d\n", wm.roomIdx)
-	return nil
+	return wm.GetCurrentRoom(), nil
 }
