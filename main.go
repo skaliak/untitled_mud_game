@@ -12,6 +12,7 @@ func main() {
 	fmt.Print("hello world!")
 	stdin := bufio.NewReader(os.Stdin)
 	world := navmap.MakeMap(10, 10)
+	var room *navmap.Room
 
 	fmt.Printf("\n%s\n", world.GetCurrentRoom().GetDesc())
 
@@ -23,16 +24,16 @@ func main() {
 			switch char {
 			case 'n':
 				fmt.Print("North...")
-				err = world.Navigate(navmap.North)
+				room, err = world.Navigate(navmap.North, room)
 			case 's':
 				fmt.Print("South...")
-				err = world.Navigate(navmap.South)
+				room, err = world.Navigate(navmap.South, room)
 			case 'e':
 				fmt.Print("East...")
-				err = world.Navigate(navmap.East)
+				room, err = world.Navigate(navmap.East, room)
 			case 'w':
 				fmt.Print("West...")
-				err = world.Navigate(navmap.West)
+				room, err = world.Navigate(navmap.West, room)
 			default:
 				fmt.Printf("invalid direction! [%c]", char)
 				continue

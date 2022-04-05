@@ -38,6 +38,5 @@ func NewRoom(location *Point, desc string) Room {
 	return Room{
 		loc:  location,
 		desc: desc,
-		// blocked: make([]Direction, 4),
 	}
 }
